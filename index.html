@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090414">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="application-name" content="Vibely">
+<title>Vibely — Your vibe. Your bestie.</title>
+<link rel="manifest" href="manifest.json">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#08040f;color:#fff;font-family:system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+.app{max-width:520px;margin:auto;min-height:100vh;padding:18px 16px 28px;background:radial-gradient(circle at 20% 0,#25104b 0,transparent 35%),radial-gradient(circle at 100% 20%,#111f55 0,transparent 35%),#08040f}
+.top{display:flex;align-items:center;justify-content:space-between}.logo{font-size:30px;font-weight:900;letter-spacing:-1px;background:linear-gradient(90deg,#38bdf8,#a855f7,#ec4899);-webkit-background-clip:text;color:transparent}.tag{font-size:12px;color:#aaa;margin-top:-3px}.gear{width:40px;height:40px;border:1px solid #3a2854;border-radius:14px;background:#120b1d;color:#fff;font-size:20px}
+.hero{margin-top:30px}.hero h1{font-size:34px;line-height:1.05;margin:0 0 8px}.hero p{color:#aaa;margin:0}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}.card{border:1px solid #33234b;border-radius:22px;padding:15px;background:linear-gradient(145deg,#151020,#0e0917);cursor:pointer;transition:.2s}.card.active{border-color:#b44cff;box-shadow:0 0 24px #8b3dce44;transform:translateY(-2px)}.avatar{height:145px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:76px;background:radial-gradient(circle,#3a1959,#10101f 65%)}.card h3{margin:12px 0 3px}.card small{color:#999}
+.btn{width:100%;border:0;border-radius:18px;padding:16px;margin-top:18px;font-size:16px;font-weight:800;color:#fff;background:linear-gradient(90deg,#2563eb,#9333ea,#db2777);box-shadow:0 10px 30px #6d28d933}.secondary{background:#151020;border:1px solid #38254f;box-shadow:none}
+.panel{margin-top:24px;border:1px solid #302041;border-radius:22px;padding:16px;background:#0d0815}.row{display:flex;justify-content:space-between;align-items:center}.pill{padding:7px 11px;border-radius:999px;background:#21152f;color:#c9a8ff;font-size:12px}.chat{height:230px;overflow:auto;margin-top:14px;display:flex;flex-direction:column;gap:9px}.msg{max-width:82%;padding:10px 13px;border-radius:15px;font-size:14px}.ai{background:#1b1028;align-self:flex-start}.me{background:#29306b;align-self:flex-end}.mic{width:76px;height:76px;border-radius:50%;border:2px solid #c04cff;background:radial-gradient(circle,#7c2dba,#251039);color:#fff;font-size:30px;display:block;margin:16px auto 4px;box-shadow:0 0 35px #a855f766}.hint{text-align:center;color:#888;font-size:12px}.footer{text-align:center;color:#666;font-size:11px;margin-top:22px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><div><div class="logo">Vibely</div><div class="tag">Your vibe. Your bestie.</div></div><button class="gear" onclick="alert('Settings prototype — coming next!')">⚙️</button></div>
+
+  <section id="home">
+    <div class="hero"><h1>Choose your<br>AI Bestie ✨</h1><p>Pick a vibe and start chatting.</p></div>
+    <div class="cards">
+      <div class="card active" id="female" onclick="pick('female')"><div class="avatar">👩🏻‍🎧</div><h3>Female Bestie</h3><small>Chill • Funny • Friendly</small></div>
+      <div class="card" id="male" onclick="pick('male')"><div class="avatar">👨🏻‍🎧</div><h3>Male Bestie</h3><small>Gaming • Chill • Friendly</small></div>
+    </div>
+    <button class="btn" onclick="startChat()">🎙️ Start Voice Chat</button>
+    <button class="btn secondary" onclick="startChat()">💬 Open Text Chat</button>
+  </section>
+
+  <section id="chatScreen" class="hidden">
+    <div class="row"><button class="gear" onclick="goHome()">‹</button><div style="text-align:center"><b id="bestieName">Nova</b><div class="tag">● Online</div></div><button class="gear" onclick="alert('Profile prototype')">⋮</button></div>
+    <div class="panel">
+      <div class="row"><span class="pill" id="mode">Female Bestie</span><span class="pill">AI Friend</span></div>
+      <div class="chat" id="chat">
+        <div class="msg ai" id="hello">Hey! 👋 I'm your Vibely bestie. How's your vibe today?</div>
+      </div>
+      <button class="mic" onclick="voiceDemo()">🎙️</button><div class="hint" id="voiceHint">Tap to talk</div>
+      <button class="btn secondary" onclick="sendDemo()">💬 Send a demo message</button>
+    </div>
+  </section>
+
+  <div class="footer">Vibely prototype • Your vibe. Your bestie.</div>
+</div>
+<script>
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+let selected='female';
+function pick(x){selected=x;document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));document.getElementById(x).classList.add('active')}
+function startChat(){document.getElementById('home').classList.add('hidden');document.getElementById('chatScreen').classList.remove('hidden');document.getElementById('bestieName').textContent=selected==='female'?'Nova':'Kai';document.getElementById('mode').textContent=selected==='female'?'Female Bestie':'Male Bestie';document.getElementById('hello').textContent=selected==='female'?"Hey! 👋 I'm Nova. Ready to chill?":"Yo! 👋 I'm Kai. Ready to vibe?";}
+function goHome(){document.getElementById('chatScreen').classList.add('hidden');document.getElementById('home').classList.remove('hidden')}
+function sendDemo(){let c=document.getElementById('chat');let m=document.createElement('div');m.className='msg me';m.textContent="Hey bestie! 😁";c.appendChild(m);setTimeout(()=>{let a=document.createElement('div');a.className='msg ai';a.textContent=selected==='female'?"Haha 😄 काय vibe आहे आज?":"Bro 😎 काय चाललंय?";c.appendChild(a);c.scrollTop=c.scrollHeight},500)}
+function voiceDemo(){let h=document.getElementById('voiceHint');h.textContent='Listening… 🎧 (prototype)';setTimeout(()=>{h.textContent='Voice AI will connect here 🎙️';},1800)}
+</script>
+</body>
+</html>
